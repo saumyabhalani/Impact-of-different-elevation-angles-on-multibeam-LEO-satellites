@@ -2,6 +2,8 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 import json
+import os
+
 
 ROOT = Path(__file__).resolve().parent.parent
 WEBSITE = ROOT / "website"
@@ -11,15 +13,17 @@ RESULTS = ROOT / "results"
 class Handler(SimpleHTTPRequestHandler):
 
     def __init__(self, *args, **kwargs):
-        # Serve HTML/CSS/JS from the website folder
-        super().__init__(*args, directory=str(WEBSITE), **kwargs)
+        super().__init__(
+            *args,
+            directory=str(WEBSITE),
+            **kwargs
+        )
 
     def do_GET(self):
+
         parsed = urlparse(self.path)
 
-        # -----------------------------
-        # API: /api/result
-        # -----------------------------
+        # API endpoint
         if parsed.path == "/api/result":
 
             q = parse_qs(parsed.query)
@@ -34,13 +38,20 @@ class Handler(SimpleHTTPRequestHandler):
                 })
                 return
 
+            # Select the correct JSON file
             if mode == "rician":
                 filename = f"macro_with_Rician{angle}deg_100km.json"
-            else:
+            elif mode == "macro":
                 filename = f"macro_no_Rician{angle}deg_100km.json"
+            else:
+                self.send_json(400, {
+                    "error": "Invalid simulation mode."
+                })
+                return
 
             path = RESULTS / filename
 
+            # Check whether JSON exists
             if not path.exists():
                 self.send_json(404, {
                     "error": f"No saved result for {angle} degrees in {mode} mode.",
@@ -48,6 +59,7 @@ class Handler(SimpleHTTPRequestHandler):
                 })
                 return
 
+            # Read JSON
             try:
                 data = json.loads(
                     path.read_text(encoding="utf-8")
@@ -62,13 +74,11 @@ class Handler(SimpleHTTPRequestHandler):
 
             return
 
-        # -----------------------------
-        # Website homepage
-        # -----------------------------
+        # Homepage
         if parsed.path == "/":
             self.path = "/index.html"
 
-        # Serve CSS / JS / HTML
+        # Serve website files
         super().do_GET()
 
     def send_json(self, code, data):
@@ -101,25 +111,40 @@ if __name__ == "__main__":
 
     if not WEBSITE.exists():
         print("ERROR: website/ folder was not found.")
+        print("Expected:", WEBSITE)
 
     if not RESULTS.exists():
         print("WARNING: results/ folder was not found.")
+        print("Expected:", RESULTS)
+
+    # Render provides the PORT environment variable.
+    # If running locally, use port 8000.
+    port = int(os.environ.get("PORT", 8000))
 
     print()
     print("==============================================")
-    print(" LEO Multi-Beam Website")
+    print(" LEO Multi-Beam Satellite Website")
     print("==============================================")
     print()
-    print("Website folder :", WEBSITE)
-    print("Results folder :", RESULTS)
+    print("Project root :", ROOT)
+    print("Website      :", WEBSITE)
+    print("Results      :", RESULTS)
+    print("Port         :", port)
     print()
-    print("Open this in your browser:")
-    print("http://127.0.0.1:8000")
-    print()
-    print("Press Ctrl+C to stop.")
+    print("Server started successfully.")
     print()
 
-    ThreadingHTTPServer(
-        ("127.0.0.1", 8000),
+    server = ThreadingHTTPServer(
+        ("0.0.0.0", port),
         Handler
-    ).serve_forever()
+    )
+
+    try:
+        server.serve_forever()
+
+    except KeyboardInterrupt:
+        print()
+        print("Server stopped.")
+
+    finally:
+        server.server_close()
