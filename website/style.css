@@ -1,0 +1,102 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7fb;
+  color: #172033;
+}
+header {
+  padding: 24px 5%;
+  background: #14213d;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+h1 { margin: 0 0 6px; font-size: 28px; }
+header p { margin: 0; opacity: .8; }
+.status {
+  padding: 8px 14px;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 20px;
+  font-size: 13px;
+}
+main { width: 90%; max-width: 1400px; margin: 24px auto 50px; }
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 5px 20px rgba(20,33,61,.07);
+}
+.controls {
+  display: grid;
+  grid-template-columns: 210px 1fr 160px;
+  align-items: end;
+  gap: 20px;
+}
+.control { display: flex; flex-direction: column; gap: 8px; }
+label { font-size: 14px; font-weight: 600; }
+select, button {
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid #c9d1df;
+  padding: 0 12px;
+  font-size: 14px;
+}
+button {
+  background: #14213d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+button:hover { opacity: .9; }
+input[type=range] { width: 100%; }
+.range-labels { display:flex; justify-content:space-between; font-size:12px; color:#68738a; }
+.notice { border-left: 5px solid #fca311; }
+.cards {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.metric {
+  background: white;
+  border-radius: 12px;
+  padding: 17px;
+  box-shadow: 0 5px 20px rgba(20,33,61,.06);
+}
+.metric span { display:block; font-size:12px; color:#68738a; margin-bottom:8px; }
+.metric strong { font-size:23px; }
+.grid {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.grid .card { margin:0; }
+.large { grid-column: 1 / -1; }
+h2 { font-size:18px; margin:0 0 14px; }
+canvas {
+  width: 100%;
+  height: 320px;
+  border: 1px solid #edf0f5;
+  border-radius: 8px;
+  background: #fff;
+}
+.hint { color:#68738a; font-size:12px; }
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  background:#f5f7fa;
+  padding:14px;
+  border-radius:8px;
+  font-size:12px;
+}
+@media (max-width: 1000px) {
+  .controls { grid-template-columns: 1fr; }
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .grid { grid-template-columns: 1fr; }
+  .large { grid-column: auto; }
+}

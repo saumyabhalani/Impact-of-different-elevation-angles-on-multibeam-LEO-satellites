@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEO Multi-Beam Satellite Simulator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div>
+      <h1>LEO Multi-Beam Satellite Communication Simulator</h1>
+      <p>Interactive student demonstration dashboard</p>
+    </div>
+    <div class="status" id="status">Connecting...</div>
+  </header>
+
+  <main>
+    <section class="controls card">
+      <div class="control">
+        <label for="mode">Simulation Mode</label>
+        <select id="mode">
+          <option value="rician">Rician Fading</option>
+          <option value="macro">Macro / No Rician</option>
+        </select>
+      </div>
+
+      <div class="control wide">
+        <label for="angle">Elevation Angle: <strong><span id="angleValue">55</span>°</strong></label>
+        <input id="angle" type="range" min="5" max="90" step="5" value="55" aria-label="Elevation angle">
+        <div class="range-labels"><span>5°</span><span>90°</span></div>
+      </div>
+
+      <button id="loadBtn">LOAD SELECTED ANGLE</button>
+    </section>
+
+    <section class="notice card">
+      <strong>How this demo works:</strong>
+      The website reads the JSON result already produced by your Python simulation.
+      Changing the angle selects the corresponding saved result; it does not re-run the full simulation.
+    </section>
+
+    <section class="cards">
+      <div class="metric"><span>Requested Elevation</span><strong id="requested">--</strong></div>
+      <div class="metric"><span>Actual Elevation</span><strong id="actual">--</strong></div>
+      <div class="metric"><span>Users</span><strong id="users">--</strong></div>
+      <div class="metric"><span>Average SNR</span><strong id="avgSnr">--</strong></div>
+      <div class="metric"><span>Average SINR</span><strong id="avgSinr">--</strong></div>
+      <div class="metric"><span>Active Beams</span><strong id="beams">--</strong></div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>SNR Distribution</h2>
+        <canvas id="snrChart"></canvas>
+      </div>
+      <div class="card">
+        <h2>SINR Distribution</h2>
+        <canvas id="sinrChart"></canvas>
+      </div>
+      <div class="card large">
+        <h2>User / Beam Association Map</h2>
+        <canvas id="mapChart"></canvas>
+        <p class="hint">Each point represents a simulated user. Point grouping shows which beam serves the user.</p>
+      </div>
+      <div class="card">
+        <h2>Beam Gain</h2>
+        <canvas id="gainChart"></canvas>
+      </div>
+    </section>
+
+    <section class="card details">
+      <h2>Simulation Data</h2>
+      <pre id="details">Loading...</pre>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+STUDENT VERSION CHANGES
+=======================
+
+1. Reduced antenna array from 32x32 to 8x8 per beam.
+2. Reduced Rician user count from 100,000 to 300.
+3. Changed macro grid spacing from 500 m to 20 km.
+   NOTE: get_grid_positions() takes spacing, not number of users.
+4. Kept 19 beams.
+5. Kept the main channel physics: path loss, atmospheric attenuation,
+   Rician fading, beam steering, interference, SNR and SINR.
+6. Expanded centre elevation-angle sampling from 3 angles to 18 angles:
+   5, 10, 15, ..., 85, 90 degrees.
+7. Added simulation_student.py and plotResults_student.py.
+8. Preserved original reference scripts under original_reference/.
